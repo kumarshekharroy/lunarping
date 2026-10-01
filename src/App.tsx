@@ -5,7 +5,7 @@ import { Hero } from './components/Hero'
 import { Navbar } from './components/Navbar'
 import { ToolGrid } from './components/ToolGrid'
 
-function App() {
+function App({ copyrightYear = new Date().getFullYear() }: { copyrightYear?: number }) {
   return (
     <>
       <a className="skip-link" href="#main">Skip to content</a>
@@ -16,7 +16,7 @@ function App() {
         <About />
         <BeyondLunarPing />
       </main>
-      <Footer />
+      <Footer copyrightYear={copyrightYear} />
     </>
   )
 }
