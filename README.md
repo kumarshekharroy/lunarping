@@ -11,7 +11,7 @@ This repository contains the LunarPing website and its tool catalogue. The indiv
 | Tool | Description |
 | --- | --- |
 | [Endpoint](https://endpoint.lunarping.com) | A playground for API requests and endpoint testing. |
-| [Markdown Viewer](https://md.lunarping.com) | A focused space for rendering and previewing Markdown. |
+| [Markdown Viewer](https://md.lunarping.com) | Read and edit Markdown on the web, macOS, and Windows, with live preview, tabs, math, and Mermaid diagrams. |
 | [Fullstack Prep](https://fullstack-prep.lunarping.com) | Interview preparation for full-stack developers. |
 | [JobDesk](https://jobdesk.lunarping.com) | A workspace for tracking job applications and next steps. |
 | [Meri Kundli](https://kundli.lunarping.com) | A web app for exploring Kundli and astrology. |

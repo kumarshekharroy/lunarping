@@ -15,7 +15,7 @@ export const tools: LunarTool[] = [
   {
     name: 'Markdown Viewer',
     slug: 'markdown',
-    description: 'Drop in Markdown and see it rendered instantly in a clean, focused space.',
+    description: 'Read and edit Markdown on the web, macOS, and Windows, with live preview, tabs, math, and Mermaid diagrams.',
     url: 'https://md.lunarping.com',
     category: 'Developer',
     priority: 2,
