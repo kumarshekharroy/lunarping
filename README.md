@@ -23,7 +23,7 @@ npm run build
 
 Deploy **all of `dist/`** to the existing static host. The included `_redirects` supports clean app URLs on Cloudflare Pages and Netlify; `_headers` preserves security and asset-caching rules. Hosts without these conventions must serve `/app` and `/app/privacy` from their corresponding `index.html` files and return `404.html` with HTTP 404 for missing paths. Explicit Vite development and preview middleware supports the exact clean URLs and trailing-slash variants. Preview returns the branded page with HTTP 404 for unknown routes. Canonicals use the approved public URLs without trailing slashes.
 
-This task changes only the website repository. It does not deploy the site or alter Android source.
+The website is maintained here and has not been deployed by this task. A later explicit artwork request updated only the app icon/logo exports in both projects; interface colors and behavior are unchanged.
 
 ## Content and assets
 
@@ -35,7 +35,7 @@ This task changes only the website repository. It does not deploy the site or al
 - `src/pages/AppPage.tsx`: feature content and supporting vector artwork.
 - `src/index.css`: shared foundations and existing tool styles. `src/redesign.css`: shared observatory palette, redesign, app, and policy styles.
 
-The Android reference was found at `/Users/shekharroy/Documents/Software Projects/Codex/com.lunarping.application`; the originally supplied `lunarping.com` reference path is the website checkout. Approved identity and features were checked against its engineering guide, design notes, store listing, theme, and bundled privacy policy. The approved app icon was reused as optimized WebP and PNG sizes. No Android files were modified.
+The Android reference was found at `/Users/shekharroy/Documents/Software Projects/Codex/com.lunarping.application`; the originally supplied `lunarping.com` reference path is the website checkout. Approved identity and features were checked against its engineering guide, design notes, store listing, theme, and bundled privacy policy. The approved app icon is exported as optimized WebP and PNG sizes. The later calm steel-blue color refinement is recorded in `assets/branding/icon-color-edit.json`, with its full-size master beside it; the original Android artwork is preserved.
 
 **No app screenshots are included**, as requested. Add the supplied screenshots to `public/app/` and integrate them into the app page when ready. Do not use fabricated camera images or app interfaces. The current illustrations are independent of the app UI.
 
