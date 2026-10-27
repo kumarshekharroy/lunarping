@@ -2,12 +2,13 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import '@fontsource-variable/manrope'
 import './index.css'
+import './redesign.css'
 import App from './App'
 
 const root = document.getElementById('root')!
 const app = (
   <React.StrictMode>
-    <App copyrightYear={Number(root.dataset.copyrightYear) || undefined} />
+    <App path={root.dataset.path ?? window.location.pathname} copyrightYear={Number(root.dataset.copyrightYear) || undefined} />
   </React.StrictMode>
 )
 

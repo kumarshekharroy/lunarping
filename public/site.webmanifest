@@ -1,13 +1,9 @@
 {
-  "name": "LunarPing",
+  "name": "LunarPing — App & Tools",
   "short_name": "LunarPing",
-  "description": "One home. Many useful tools.",
   "start_url": "/",
-  "display": "standalone",
-  "background_color": "#090d12",
-  "theme_color": "#090d12",
-  "icons": [
-    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
-    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png", "purpose": "any" }
-  ]
+  "display": "browser",
+  "background_color": "#0c141b",
+  "theme_color": "#0c141b",
+  "icons": [{ "src": "/app/icon-64.png", "sizes": "64x64", "type": "image/png" }, { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }]
 }

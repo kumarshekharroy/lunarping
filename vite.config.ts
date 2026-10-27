@@ -1,96 +1,57 @@
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import tailwindcss from '@tailwindcss/vite'
-import { defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite'
-import { getSitemapUrls, getStructuredData, site } from './src/data/site'
-
-function escapeXml(value: string) {
-  return value.replace(/[&<>"']/g, (character) => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&apos;',
-  })[character]!)
-}
+import { defineConfig, type Plugin } from 'vite'
+import { escapeHtml, getSeoMarkup, getSitemapUrls, site } from './src/data/site'
 
 function seo(): Plugin {
-  const sitemapEntries = getSitemapUrls()
-    .map((url) => `  <url>\n    <loc>${escapeXml(url)}</loc>\n  </url>`)
-    .join('\n')
+  const sitemapEntries = getSitemapUrls().map(url => `  <url>\n    <loc>${escapeHtml(url)}</loc>\n  </url>`).join('\n')
   const crawlFiles = {
-    'robots.txt': {
-      type: 'text/plain; charset=utf-8',
-      content: `User-agent: *\nAllow: /\n\nSitemap: ${site.url}sitemap.xml\n`,
-    },
-    'sitemap.xml': {
-      type: 'application/xml; charset=utf-8',
-      content: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapEntries}\n</urlset>\n`,
-    },
+    'robots.txt': { type: 'text/plain; charset=utf-8', content: `User-agent: *\nAllow: /\n\nSitemap: ${site.url}sitemap.xml\n` },
+    'sitemap.xml': { type: 'application/xml; charset=utf-8', content: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapEntries}\n</urlset>\n` },
   }
-
   return {
     name: 'lunarping-seo',
-    transformIndexHtml() {
-      const tags: HtmlTagDescriptor[] = [
-        { tag: 'title', children: site.title },
-        { tag: 'link', attrs: { rel: 'canonical', href: site.url } },
-        { tag: 'meta', attrs: { name: 'description', content: site.description } },
-        { tag: 'meta', attrs: { name: 'author', content: site.creator.name } },
-        { tag: 'meta', attrs: { name: 'robots', content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' } },
-      ]
-      const openGraph = {
-        type: 'website',
-        site_name: site.name,
-        title: site.title,
-        description: site.description,
-        url: site.url,
-        image: site.image.url,
-        'image:type': 'image/png',
-        'image:width': String(site.image.width),
-        'image:height': String(site.image.height),
-        'image:alt': site.image.alt,
-      }
-      const twitter = {
-        card: 'summary_large_image',
-        title: site.title,
-        description: site.description,
-        image: site.image.url,
-        'image:alt': site.image.alt,
-      }
-
-      for (const [key, content] of Object.entries(openGraph)) {
-        tags.push({ tag: 'meta', attrs: { property: `og:${key}`, content } })
-      }
-      for (const [key, content] of Object.entries(twitter)) {
-        tags.push({ tag: 'meta', attrs: { name: `twitter:${key}`, content } })
-      }
-      tags.push({
-        tag: 'script',
-        attrs: { type: 'application/ld+json' },
-        // Keep catalogue text from terminating the script element.
-        children: JSON.stringify(getStructuredData()).replace(/</g, '\\u003c'),
-      })
-
-      return tags.map((tag) => ({ ...tag, injectTo: 'head' }))
+    transformIndexHtml(html, context) {
+      const path = context.originalUrl?.split('?')[0] ?? '/'
+      return html.replace('<!-- seo -->', `<!-- seo:start -->\n    ${getSeoMarkup(path)}\n    <!-- seo:end -->`)
     },
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
-        const path = request.url?.split('?')[0].slice(1)
-        if (!path || !Object.hasOwn(crawlFiles, path)) return next()
-        const file = crawlFiles[path as keyof typeof crawlFiles]
-        response.setHeader('Content-Type', file.type)
-        response.end(file.content)
+        const path = request.url?.split('?')[0] ?? '/'
+        const file = Object.hasOwn(crawlFiles, path.slice(1)) ? crawlFiles[path.slice(1) as keyof typeof crawlFiles] : undefined
+        if (file) { response.setHeader('Content-Type', file.type); response.end(file.content); return }
+        if (/^\/app(?:\/privacy)?\/?$/.test(path)) request.url = '/index.html'
+        next()
+      })
+    },
+    configurePreviewServer(server) {
+      // Preview doesn't interpret a static host's _redirects file.
+      const output = resolve(server.config.root, server.config.build.outDir)
+      const pageFiles: Record<string, string> = {
+        '/': 'index.html', '/index.html': 'index.html',
+        '/app': 'app/index.html', '/app/index.html': 'app/index.html',
+        '/app/privacy': 'app/privacy/index.html', '/app/privacy/index.html': 'app/privacy/index.html',
+        '/404.html': '404.html',
+      }
+      server.middlewares.use((request, response, next) => {
+        const path = (request.url ?? '/').split('?')[0].replace(/\/+$/, '') || '/'
+        const file = Object.hasOwn(pageFiles, path) ? pageFiles[path] : undefined
+        if (!file) return next()
+        response.setHeader('Content-Type', 'text/html; charset=utf-8')
+        response.end(readFileSync(resolve(output, file), 'utf8'))
+      })
+      const notFoundHtml = readFileSync(resolve(output, '404.html'), 'utf8')
+      return () => server.middlewares.use((_request, response) => {
+        response.statusCode = 404
+        response.setHeader('Content-Type', 'text/html; charset=utf-8')
+        response.end(notFoundHtml)
       })
     },
     generateBundle() {
-      for (const [fileName, file] of Object.entries(crawlFiles)) {
-        this.emitFile({ type: 'asset', fileName, source: file.content })
-      }
+      for (const [fileName, file] of Object.entries(crawlFiles)) this.emitFile({ type: 'asset', fileName, source: file.content })
     },
   }
 }
 
-export default defineConfig({
-  // This is a single static page; missing paths must not fall back to its HTML.
-  appType: 'mpa',
-  plugins: [tailwindcss(), seo()],
-})
+export default defineConfig({ appType: 'mpa', plugins: [tailwindcss(), seo()] })

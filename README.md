@@ -1,75 +1,50 @@
 # LunarPing
 
-**One home. Many useful tools.**
+**Made for the curious.**
 
-[LunarPing](https://lunarping.com) is a discovery hub for developer utilities, productivity apps, career tools, and web experiments.
+LunarPing is the home of **LunarPing: Sky Map & Alarms** and a collection of independent web tools by [Shekhar Roy](https://shekharroy.com).
 
-This repository contains the LunarPing website and its tool catalogue. The individual tools are hosted separately.
+## Develop and build
 
-## Explore the collection
-
-| Tool | Description |
-| --- | --- |
-| [Endpoint](https://endpoint.lunarping.com) | A playground for API requests and endpoint testing. |
-| [Markdown Viewer](https://md.lunarping.com) | Read and edit Markdown on the web, macOS, and Windows, with live preview, tabs, math, and Mermaid diagrams. |
-| [Fullstack Prep](https://fullstack-prep.lunarping.com) | Interview preparation for full-stack developers. |
-| [JobDesk](https://jobdesk.lunarping.com) | A workspace for tracking job applications and next steps. |
-| [Meri Kundli](https://kundli.lunarping.com) | A web app for exploring Kundli and astrology. |
-
-The website includes search and category filters to help visitors find a tool.
-
-## Built with
-
-React, TypeScript, Vite, Tailwind CSS, and Lucide React, with a self-hosted Manrope font. Production builds prerender the homepage into static HTML; React adds interactive search and filtering in the browser.
-
-## Getting started
-
-Install Node.js and npm, then run these commands from the repository directory:
-
-```bash
+```sh
 npm ci
 npm run dev
+npm run build
 ```
 
-Open the local URL printed by Vite.
+`npm run build` checks TypeScript, builds with Vite, and prerenders every route into static HTML. `npm run preview` serves the production output. Run `npm run verify` after building to check static route content, metadata, links, the sitemap, and policy text integrity. `npm run lint` checks ESLint.
 
-### Available commands
+| Route | Purpose | Production file |
+| --- | --- | --- |
+| `/` | Brand homepage, app introduction, searchable tool hub | `dist/index.html` |
+| `/app` | Astronomy app landing page | `dist/app/index.html` |
+| `/app/privacy` | Full app privacy policy | `dist/app/privacy/index.html` |
+| Unknown paths | Branded 404 | `dist/404.html` |
 
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | Start the development server. |
-| `npm run lint` | Check the code with ESLint. |
-| `npm run build` | Check TypeScript and generate the prerendered production site in `dist/`. |
-| `npm run preview` | Preview a production build locally. Run the build command first. |
+Deploy **all of `dist/`** to the existing static host. The included `_redirects` supports clean app URLs on Cloudflare Pages and Netlify; `_headers` preserves security and asset-caching rules. Hosts without these conventions must serve `/app` and `/app/privacy` from their corresponding `index.html` files and return `404.html` with HTTP 404 for missing paths. Explicit Vite development and preview middleware supports the exact clean URLs and trailing-slash variants. Preview returns the branded page with HTTP 404 for unknown routes. Canonicals use the approved public URLs without trailing slashes.
 
-## Project structure
+This task changes only the website repository. It does not deploy the site or alter Android source.
 
-- [`src/data/tools.ts`](src/data/tools.ts) — tool catalogue and display order
-- [`src/types/tool.ts`](src/types/tool.ts) — tool categories and data shape
-- [`src/components/`](src/components/) — page sections, cards, and search
-- [`src/index.css`](src/index.css) — site styles
-- [`src/data/site.ts`](src/data/site.ts) — canonical URL, SEO metadata, and catalogue structured data
-- [`scripts/prerender.mjs`](scripts/prerender.mjs) — build-time homepage rendering
-- [`public/`](public/) — static assets, 404 page, and hosting headers/redirects
+## Content and assets
 
-## Updating the catalogue
+- `src/data/tools.ts`: unchanged tool catalogue, categories, URLs, and ordering.
+- `src/data/app.ts`: app identity, official tagline, support email, and download link.
+- `src/data/site.ts`: per-route titles, descriptions, canonical and social metadata, structured data, and sitemap URLs.
+- `src/data/app-privacy.txt`: exact bundled Android policy dated **27 October 2026**. `PrivacyPage.tsx` renders its sections without rewriting policy paragraphs. Keep this file synchronized with the policy shipped in future app releases.
+- `src/components/CelestialScene.tsx`: original SVG illustrations with an accessible Moon/Sun/Saturn selector. They are labeled illustrations, not live astronomical results or app interfaces.
+- `src/pages/AppPage.tsx`: feature content and supporting vector artwork.
+- `src/index.css`: shared foundations and existing tool styles. `src/redesign.css`: shared observatory palette, redesign, app, and policy styles.
 
-Add or edit an entry in [`src/data/tools.ts`](src/data/tools.ts). Each tool has a name, description, URL, category, status, and display priority. New entries should use a unique `slug` and `priority`, with a category defined in [`src/types/tool.ts`](src/types/tool.ts).
+The Android reference was found at `/Users/shekharroy/Documents/Software Projects/Codex/com.lunarping.application`; the originally supplied `lunarping.com` reference path is the website checkout. Approved identity and features were checked against its engineering guide, design notes, store listing, theme, and bundled privacy policy. The approved app icon was reused as optimized WebP and PNG sizes. No Android files were modified.
 
-The website and its structured data use the same catalogue. Update site metadata in [`src/data/site.ts`](src/data/site.ts), then run `npm run lint` and `npm run build` to check your changes.
+**No app screenshots are included**, as requested. Add the supplied screenshots to `public/app/` and integrate them into the app page when ready. Do not use fabricated camera images or app interfaces. The current illustrations are independent of the app UI.
 
-## Production build
+### Enable the real download CTA
 
-Use `npm run build` to generate the complete site, including prerendered content, social preview metadata, JSON-LD structured data, `robots.txt`, and `sitemap.xml`. The sitemap includes the LunarPing homepage and tool URLs on LunarPing subdomains, using the catalogue to keep the list current.
+`app.downloadUrl` is intentionally `null`: the reference release notes do not establish a live public listing. The page explicitly says the download link is coming soon, and never shows an active store badge. Once a public URL is verified, set it in `src/data/app.ts`; the app hero, final CTA, FAQ, and app structured data use it automatically. No price, ratings, release date, or iOS availability is asserted.
 
-Submit the shared sitemap through a verified `lunarping.com` domain property in Google Search Console, which covers its subdomains. Google supports [cross-site sitemap submission](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#sitemap-cross-submission) for verified sites.
+## Tool hub
 
-Deploy the `dist/` directory to a static host. The included `_headers`, `_redirects`, and `404.html` files support Cloudflare Pages and Netlify. Other hosts may need equivalent configuration for headers, redirects, and HTTP 404 responses. Domain redirects and HTTPS are configured through the hosting provider. Vite preview does not apply hosting-specific rules.
+All five tools retain their original URLs, descriptions, categories, and search/filter behavior: Endpoint, Markdown Viewer, Fullstack Prep, JobDesk, and Meri Kundli. Kitna Lagega is the second homepage product highlight, directly after the LunarPing app hero and before the tool hub. Its original ruler icon, measured-layout workflow, construction and finishing estimates, and Web/Android identity were checked against the separate read-only `kitnalagega.com` project. It links to its own website and has no additional route in this repository. The creator profile remains available.
 
-## Creator
-
-Built and maintained by [Shekhar Roy](https://shekharroy.com).
-
-## License
-
-This repository does not currently include a license.
+The sitemap includes the three public routes and the existing tool subdomains. Use the verified `lunarping.com` domain property for sitemap submission. The website uses self-hosted Manrope, React, TypeScript, Vite, Tailwind, and Lucide with no new runtime dependencies.

@@ -22,9 +22,9 @@ export function ToolGrid() {
   return (
     <section className="tools-section section-shell" id="tools" aria-labelledby="tools-title">
       <div className="container">
-        <div className="section-kicker"><span>01 / THE COLLECTION</span><span className="kicker-line" /></div>
+        <div className="section-kicker"><span>03 / THE TOOL COLLECTION</span><span className="kicker-line" /></div>
         <div className="section-heading-row">
-          <div><h2 id="tools-title">Explore <span>LunarPing</span></h2><p>A growing collection of focused tools. Each one does one job well.</p></div>
+          <div><h2 id="tools-title">Small tools. <span>Useful possibilities.</span></h2><p>The collection that started it all. Pick a tool and get into it.</p></div>
           <span className="section-count">{String(orderedTools.length).padStart(2, '0')} TOOLS <ArrowUpRight size={14} aria-hidden="true" /></span>
         </div>
         <ToolSearch query={query} onQueryChange={setQuery} category={category} onCategoryChange={setCategory} categories={categories} />
