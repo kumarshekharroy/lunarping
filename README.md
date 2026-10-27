@@ -16,7 +16,7 @@ npm run build
 
 | Route | Purpose | Production file |
 | --- | --- | --- |
-| `/` | Brand homepage, app introduction, searchable tool hub | `dist/index.html` |
+| `/` | Brand homepage, app introductions, searchable tool hub, shared contact form | `dist/index.html` |
 | `/app` | Astronomy app landing page | `dist/app/index.html` |
 | `/app/privacy` | Full app privacy policy | `dist/app/privacy/index.html` |
 | Unknown paths | Branded 404 | `dist/404.html` |
@@ -29,6 +29,7 @@ The website is maintained here and has not been deployed by this task. A later e
 
 - `src/data/tools.ts`: unchanged tool catalogue, categories, URLs, and ordering.
 - `src/data/app.ts`: app identity, official tagline, support email, and download link.
+- `src/data/kitna.ts`: Kitna Lagega identity, description, website, and Google Play link.
 - `src/data/site.ts`: per-route titles, descriptions, canonical and social metadata, structured data, and sitemap URLs.
 - `src/data/app-privacy.txt`: exact bundled Android policy dated **27 October 2026**. `PrivacyPage.tsx` renders its sections without rewriting policy paragraphs. Keep this file synchronized with the policy shipped in future app releases.
 - `src/components/CelestialScene.tsx`: original SVG illustrations with an accessible Moon/Sun/Saturn selector. They are labeled illustrations, not live astronomical results or app interfaces.
@@ -39,12 +40,18 @@ The Android reference was found at `/Users/shekharroy/Documents/Software Project
 
 **No app screenshots are included**, as requested. Add the supplied screenshots to `public/app/` and integrate them into the app page when ready. Do not use fabricated camera images or app interfaces. The current illustrations are independent of the app UI.
 
-### Enable the real download CTA
+### Google Play links
 
-`app.downloadUrl` is intentionally `null`: the reference release notes do not establish a live public listing. The page explicitly says the download link is coming soon, and never shows an active store badge. Once a public URL is verified, set it in `src/data/app.ts`; the app hero, final CTA, FAQ, and app structured data use it automatically. No price, ratings, release date, or iOS availability is asserted.
+The owner-supplied LunarPing listing URL is `https://play.google.com/store/apps/details?id=com.lunarping.app`. `app.downloadUrl` drives the app hero, final CTA, FAQ, and structured data. Kitna Lagega is released on Android at `https://play.google.com/store/apps/details?id=com.kitnalagega.app`; its homepage highlight includes separate Google Play and website links. No price, ratings, release date, or iOS availability is asserted. Homepage and app-page titles, descriptions, Open Graph/Twitter metadata, and application structured data reflect the current content and links.
+
+## Contact and feedback
+
+The homepage has one shared website form at `/#contact`, linked from the main navigation, footer, and app page. It collects a name, reply email, subject, and message. Subjects cover feedback, bugs, support, privacy/data requests, collaboration, and other enquiries; there are no listing-specific forms.
+
+The form submits directly over HTTPS to `https://formsubmit.co/contact@shekharroy.com` using a native POST, including when JavaScript is unavailable. It uses browser validation, a honeypot, FormSubmit's default spam check and confirmation page, and a table email template. The selected subject becomes the email subject with a `[LunarPing website]` prefix. The form explains that the details are sent through FormSubmit and links its privacy policy. If the recipient has not already activated FormSubmit, the first submission triggers a confirmation email that the recipient must approve before delivery is enabled. Do not send real test messages as part of automated checks.
 
 ## Tool hub
 
-All five tools retain their original URLs, descriptions, categories, and search/filter behavior: Endpoint, Markdown Viewer, Fullstack Prep, JobDesk, and Meri Kundli. Kitna Lagega is the second homepage product highlight, directly after the LunarPing app hero and before the tool hub. Its original ruler icon, measured-layout workflow, construction and finishing estimates, and Web/Android identity were checked against the separate read-only `kitnalagega.com` project. It links to its own website and has no additional route in this repository. The creator profile remains available.
+All five tools retain their original URLs, descriptions, categories, and search/filter behavior: Endpoint, Markdown Viewer, Fullstack Prep, JobDesk, and Meri Kundli. Kitna Lagega is the second homepage product highlight, directly after the LunarPing app hero and before the tool hub. Its original ruler icon, measured-layout workflow, construction and finishing estimates, and Web/Android identity were checked against the separate read-only `kitnalagega.com` project. The expanded highlight includes feature details, a floor-plan illustration, and separate website and Google Play links; LunarPing remains the flagship. There is no additional Kitna Lagega route in this repository. The creator profile remains available.
 
 The sitemap includes the three public routes and the existing tool subdomains. Use the verified `lunarping.com` domain property for sitemap submission. The website uses self-hosted Manrope, React, TypeScript, Vite, Tailwind, and Lucide with no new runtime dependencies.

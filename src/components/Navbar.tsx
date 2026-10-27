@@ -11,8 +11,9 @@ export function Navbar({ path }: { path: string }) {
           <a href="/app" aria-current={path === '/app' ? 'page' : undefined}>The app</a>
           <a href={isHome ? '#tools' : '/#tools'}>Tools</a>
           <a href={isHome ? '#about' : '/#about'}>About</a>
+          <a href={isHome ? '#contact' : '/#contact'}>Contact</a>
         </div>
-        <a className="nav-cta" href={path === '/app' ? '#download' : '/app'}>{path === '/app' ? 'Android availability' : 'Explore the app'} <ArrowUpRight size={15} strokeWidth={1.8} aria-hidden="true" /></a>
+        <a className="nav-cta" href={path === '/app' ? '#download' : '/app'}>{path === '/app' ? 'Get the Android app' : 'Explore the app'} <ArrowUpRight size={15} strokeWidth={1.8} aria-hidden="true" /></a>
       </nav>
     </header>
   )

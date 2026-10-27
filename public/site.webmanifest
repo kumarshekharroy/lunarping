@@ -1,5 +1,6 @@
 {
-  "name": "LunarPing — App & Tools",
+  "name": "LunarPing — Apps & Tools",
+  "description": "LunarPing: Sky Map & Alarms, Kitna Lagega construction estimates, and independent web tools by Shekhar Roy.",
   "short_name": "LunarPing",
   "start_url": "/",
   "display": "browser",

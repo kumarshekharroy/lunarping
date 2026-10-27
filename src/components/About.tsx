@@ -28,7 +28,7 @@ export function About() {
           <div className="creator-note-copy">
             <span className="creator-note-label">THE PERSON BEHIND LUNARPING</span>
             <h3 id="creator-title">Shekhar Roy</h3>
-            <p>Independent developer behind the app and the tools.</p>
+            <p>Independent developer behind the apps and tools.</p>
           </div>
           <a href="https://shekharroy.com">View portfolio <ArrowUpRight size={16} aria-hidden="true" /></a>
         </aside>

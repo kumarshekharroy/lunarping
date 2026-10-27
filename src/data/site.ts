@@ -1,11 +1,12 @@
 import { tools } from './tools'
 import { app } from './app'
+import { kitna } from './kitna'
 
 export const site = {
   name: 'LunarPing',
   url: 'https://lunarping.com/',
-  title: 'LunarPing — Made for the Curious',
-  description: 'Explore LunarPing: Sky Map & Alarms, Kitna Lagega for construction estimates, and independent developer and productivity tools by Shekhar Roy.',
+  title: 'LunarPing — Android Apps & Useful Web Tools',
+  description: 'Explore LunarPing: Sky Map & Alarms, Kitna Lagega construction estimates for Android and web, and useful independent tools by Shekhar Roy. Get in touch.',
   language: 'en',
   creator: { name: 'Shekhar Roy', url: 'https://shekharroy.com/' },
   image: { url: 'https://lunarping.com/og-image.png', width: 1200, height: 630, alt: 'LunarPing — Sky Map & Alarms and independent tools. Made for the curious.' },
@@ -16,7 +17,7 @@ export type SiteRoute = typeof routes[number]
 
 export function getPageMetadata(path: string) {
   const route = path.split('?')[0].replace(/\/+$/, '').replace(/\/index\.html$/, '') || '/'
-  if (route === '/app') return { title: app.name + ' — Explore Your Sky', description: app.tagline + ' Discover the Android app’s sky map, live camera finder, celestial alarms, and offline exploration.', url: site.url + 'app', index: true }
+  if (route === '/app') return { title: app.name + ' — Android App', description: 'Explore a 360° sky map, find celestial objects with your camera, and set astronomical alarms with LunarPing for Android. Find it on Google Play.', url: site.url + 'app', index: true }
   if (route === '/app/privacy') return { title: 'LunarPing App Privacy Policy — Shekhar Roy', description: 'How LunarPing: Sky Map & Alarms handles location, camera access, local data, optional online services, and privacy choices. Updated 27 October 2026.', url: site.url + 'app/privacy', index: true }
   if (route === '/') return { title: site.title, description: site.description, url: site.url, index: true }
   return { title: 'Page not found — LunarPing', description: 'Explore the LunarPing app and independent tool collection.', url: new URL(route, site.url).href, index: false }
@@ -34,10 +35,11 @@ export function getStructuredData(path = '/') {
   const graph: object[] = [
     { '@type': 'Person', '@id': `${site.url}#creator`, name: site.creator.name, url: site.creator.url },
     { '@type': 'WebSite', '@id': `${site.url}#website`, name: site.name, url: site.url, description: site.description, inLanguage: site.language, publisher: { '@id': `${site.url}#creator` } },
-    { '@type': path === '/' ? 'CollectionPage' : 'WebPage', '@id': `${page.url}#webpage`, name: page.title, url: page.url, description: page.description, inLanguage: site.language, isPartOf: { '@id': `${site.url}#website` }, author: { '@id': `${site.url}#creator` }, ...(path === '/' ? { mainEntity: { '@id': `${site.url}#tools` } } : path === '/app' ? { mainEntity: { '@id': `${site.url}app#application` } } : {}) },
+    { '@type': path === '/' ? 'CollectionPage' : 'WebPage', '@id': `${page.url}#webpage`, name: page.title, url: page.url, description: page.description, inLanguage: site.language, isPartOf: { '@id': `${site.url}#website` }, author: { '@id': `${site.url}#creator` }, ...(path === '/' ? { mainEntity: [{ '@id': `${site.url}app#application` }, { '@id': `${kitna.url}/#application` }, { '@id': `${site.url}#tools` }] } : path === '/app' ? { mainEntity: { '@id': `${site.url}app#application` } } : {}) },
   ]
   if (path === '/') graph.push({ '@type': 'ItemList', '@id': `${site.url}#tools`, name: 'LunarPing tools', numberOfItems: orderedTools.length, itemListOrder: 'https://schema.org/ItemListOrderAscending', itemListElement: orderedTools.map((tool, index) => ({ '@type': 'ListItem', position: index + 1, item: { '@type': 'WebApplication', name: tool.name, url: tool.url, description: tool.description, applicationCategory: tool.category } })) })
-  if (path === '/app') graph.push({ '@type': 'MobileApplication', '@id': `${site.url}app#application`, name: app.name, description: app.tagline, url: `${site.url}app`, operatingSystem: 'Android', applicationCategory: 'EducationalApplication', image: `${site.url}app/icon.webp`, author: { '@id': `${site.url}#creator` }, ...(app.downloadUrl ? { downloadUrl: app.downloadUrl } : {}) })
+  if (path === '/' || path === '/app') graph.push({ '@type': 'MobileApplication', '@id': `${site.url}app#application`, name: app.name, description: app.tagline, url: `${site.url}app`, operatingSystem: 'Android', applicationCategory: 'EducationalApplication', image: `${site.url}app/icon.webp`, author: { '@id': `${site.url}#creator` }, ...(app.downloadUrl ? { downloadUrl: app.downloadUrl } : {}) })
+  if (path === '/') graph.push({ '@type': 'SoftwareApplication', '@id': `${kitna.url}/#application`, name: kitna.name, description: kitna.description, url: kitna.url, operatingSystem: ['Android', 'Web'], applicationCategory: 'ProductivityApplication', image: `${site.url}products/kitna-lagega.svg`, downloadUrl: kitna.downloadUrl, author: { '@id': `${site.url}#creator` } })
   return { '@context': 'https://schema.org', '@graph': graph }
 }
 

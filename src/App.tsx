@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { About } from './components/About'
+import { Contact } from './components/Contact'
 import { Footer } from './components/Footer'
 import { Hero } from './components/Hero'
 import { Navbar } from './components/Navbar'
@@ -26,7 +27,7 @@ function App({ path = '/', copyrightYear = new Date().getFullYear() }: { path?: 
     <a className="skip-link" href="#main">Skip to content</a>
     <Navbar path={route} />
     <main id="main">
-      {route === '/' ? <><Hero /><ProductHighlight /><ToolGrid /><About /></> : route === '/app' ? <AppPage /> : route === '/app/privacy' ? <PrivacyPage /> : <section id="top" className="not-found container"><span className="section-kicker">LUNARPING / 404</span><h1>This page is out of orbit.</h1><p>Head home to explore the app and tool collection.</p><a className="button button-primary" href="/">Back to LunarPing →</a></section>}
+      {route === '/' ? <><Hero /><ProductHighlight /><ToolGrid /><About /><Contact /></> : route === '/app' ? <AppPage /> : route === '/app/privacy' ? <PrivacyPage /> : <section id="top" className="not-found container"><span className="section-kicker">LUNARPING / 404</span><h1>This page is out of orbit.</h1><p>Head home to explore the app and tool collection.</p><a className="button button-primary" href="/">Back to LunarPing →</a></section>}
     </main>
     <Footer copyrightYear={copyrightYear} />
   </>
