@@ -12,13 +12,15 @@ export const site = {
   image: { url: 'https://lunarping.com/og-image.png', width: 1200, height: 630, alt: 'LunarPing — Sky Map & Alarms and independent tools. Made for the curious.' },
 } as const
 
+const privacyUrl = site.url + 'app/privacy'
+
 export const routes = ['/', '/app', '/app/privacy'] as const
 export type SiteRoute = typeof routes[number]
 
 export function getPageMetadata(path: string) {
   const route = path.split('?')[0].replace(/\/+$/, '').replace(/\/index\.html$/, '') || '/'
   if (route === '/app') return { title: app.name + ' — Android App', description: 'Explore a 360° sky map, find celestial objects with your camera, and set astronomical alarms with LunarPing for Android. Find it on Google Play.', url: site.url + 'app', index: true }
-  if (route === '/app/privacy') return { title: 'LunarPing App Privacy Policy — Shekhar Roy', description: 'How LunarPing: Sky Map & Alarms handles location, camera access, local data, optional online services, and privacy choices. Updated 27 October 2026.', url: site.url + 'app/privacy', index: true }
+  if (route === '/app/privacy') return { title: 'LunarPing App Privacy Policy', description: 'How LunarPing handles location, camera access, local data, optional satellite and online services, and your privacy choices.', url: privacyUrl, index: true }
   if (route === '/') return { title: site.title, description: site.description, url: site.url, index: true }
   return { title: 'Page not found — LunarPing', description: 'Explore the LunarPing app and independent tool collection.', url: new URL(route, site.url).href, index: false }
 }
@@ -31,11 +33,15 @@ export function getSitemapUrls() {
 
 export function getStructuredData(path = '/') {
   const page = getPageMetadata(path)
+  const webPage = { '@id': `${page.url}#webpage`, name: page.title, url: page.url, description: page.description, inLanguage: site.language, isPartOf: { '@id': `${site.url}#website` } }
+  if (page.url === privacyUrl) {
+    return { '@context': 'https://schema.org', '@graph': [{ '@type': 'WebPage', ...webPage }] }
+  }
   const orderedTools = [...tools].sort((a, b) => a.priority - b.priority)
   const graph: object[] = [
     { '@type': 'Person', '@id': `${site.url}#creator`, name: site.creator.name, url: site.creator.url },
     { '@type': 'WebSite', '@id': `${site.url}#website`, name: site.name, url: site.url, description: site.description, inLanguage: site.language, publisher: { '@id': `${site.url}#creator` } },
-    { '@type': path === '/' ? 'CollectionPage' : 'WebPage', '@id': `${page.url}#webpage`, name: page.title, url: page.url, description: page.description, inLanguage: site.language, isPartOf: { '@id': `${site.url}#website` }, author: { '@id': `${site.url}#creator` }, ...(path === '/' ? { mainEntity: [{ '@id': `${site.url}app#application` }, { '@id': `${kitna.url}/#application` }, { '@id': `${site.url}#tools` }] } : path === '/app' ? { mainEntity: { '@id': `${site.url}app#application` } } : {}) },
+    { '@type': path === '/' ? 'CollectionPage' : 'WebPage', ...webPage, author: { '@id': `${site.url}#creator` }, ...(path === '/' ? { mainEntity: [{ '@id': `${site.url}app#application` }, { '@id': `${kitna.url}/#application` }, { '@id': `${site.url}#tools` }] } : path === '/app' ? { mainEntity: { '@id': `${site.url}app#application` } } : {}) },
   ]
   if (path === '/') graph.push({ '@type': 'ItemList', '@id': `${site.url}#tools`, name: 'LunarPing tools', numberOfItems: orderedTools.length, itemListOrder: 'https://schema.org/ItemListOrderAscending', itemListElement: orderedTools.map((tool, index) => ({ '@type': 'ListItem', position: index + 1, item: { '@type': 'WebApplication', name: tool.name, url: tool.url, description: tool.description, applicationCategory: tool.category } })) })
   if (path === '/' || path === '/app') graph.push({ '@type': 'MobileApplication', '@id': `${site.url}app#application`, name: app.name, description: app.tagline, url: `${site.url}app`, operatingSystem: 'Android', applicationCategory: 'EducationalApplication', image: `${site.url}app/icon.webp`, author: { '@id': `${site.url}#creator` }, ...(app.downloadUrl ? { downloadUrl: app.downloadUrl } : {}) })
@@ -53,7 +59,7 @@ export function getSeoMarkup(path: string) {
   return [
     `<title>${escapeHtml(page.title)}</title>`,
     `<link rel="canonical" href="${escapeHtml(page.url)}" />`,
-    meta('description', page.description), meta('author', site.creator.name), meta('robots', page.index ? 'index, follow, max-image-preview:large' : 'noindex, follow'),
+    meta('description', page.description), ...(page.url === privacyUrl ? [] : [meta('author', site.creator.name)]), meta('robots', page.index ? 'index, follow, max-image-preview:large' : 'noindex, follow'),
     ...Object.entries({ type: 'website', site_name: site.name, title: page.title, description: page.description, url: page.url, image: site.image.url, 'image:type': 'image/png', 'image:width': String(site.image.width), 'image:height': String(site.image.height), 'image:alt': site.image.alt }).map(([key,value]) => meta(`og:${key}`, value, true)),
     ...Object.entries({ card: 'summary_large_image', title: page.title, description: page.description, image: site.image.url, 'image:alt': site.image.alt }).map(([key,value]) => meta(`twitter:${key}`, value)),
     `<script type="application/ld+json">${JSON.stringify(getStructuredData(path)).replace(/</g, '\\u003c')}</script>`,

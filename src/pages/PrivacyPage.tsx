@@ -1,9 +1,11 @@
 import { Fragment } from 'react'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
+import { app } from '../data/app'
 import privacyText from '../data/app-privacy.txt?raw'
 
-const headings = new Set(['Location and saved information','Optional place names','Camera and orientation','Notifications, alarms and lock screen','Optional online services and privacy choices','Reviews and updates','Feedback you choose to send','Retention, security and deletion','Changes and inquiries'])
+const headings = new Set(['Location and saved information','Optional place names','Camera and orientation','Notifications, alarms and lock screen','Optional satellite data','Optional online services and privacy choices','Reviews and updates','Feedback you choose to send','Retention, security and deletion','Changes and inquiries'])
 const blocks = privacyText.trim().split(/\n\s*\n/)
+const lastUpdated = blocks[0].split('\n').find(line => line.startsWith('Last updated: '))
 const sections: { title: string; paragraphs: string[] }[] = []
 for (const block of blocks.slice(2)) {
   const [firstLine, ...rest] = block.split('\n')
@@ -25,7 +27,7 @@ function PolicyText({ text }: { text: string }) {
 export function PrivacyPage() {
   return <div id="top" className="privacy-page container">
     <a href="/app" className="text-link privacy-back"><ArrowLeft size={16} aria-hidden="true" /> Back to the app</a>
-    <header className="privacy-heading"><span className="section-kicker">LUNARPING: SKY MAP &amp; ALARMS</span><h1>Privacy policy<span>.</span></h1><p>Your sky. Your choices.</p><div className="policy-meta"><span>Publisher: Shekhar Roy</span><span>Last updated: 27 October 2026</span></div><p className="policy-contact"><a href="mailto:contact@shekharroy.com">contact@shekharroy.com <ArrowUpRight size={14} aria-hidden="true" /></a></p></header>
+    <header className="privacy-heading"><span className="section-kicker">LUNARPING: SKY MAP &amp; ALARMS</span><h1>Privacy policy<span>.</span></h1><p>Your sky. Your choices.</p><div className="policy-meta"><span>{lastUpdated}</span></div><p className="policy-contact"><a href={`mailto:${app.contact}`}>{app.contact} <ArrowUpRight size={14} aria-hidden="true" /></a></p></header>
     <div className="privacy-layout"><aside className="privacy-contents"><nav aria-label="Privacy policy contents"><span>IN THIS POLICY</span>{sections.map((section, i) => <a key={section.title} href={`#${sectionId(section.title)}`}><small>{String(i + 1).padStart(2,'0')}</small>{section.title}</a>)}</nav></aside>
       <article className="policy-copy" aria-label="LunarPing privacy policy"><p className="policy-introduction"><PolicyText text={blocks[1]} /></p>{sections.map((section, i) => <section id={sectionId(section.title)} key={section.title} aria-labelledby={`policy-heading-${i}`}><h2 id={`policy-heading-${i}`}><span>{String(i+1).padStart(2,'0')}</span>{section.title}</h2>{section.paragraphs.map((paragraph, index) => <p key={index}><PolicyText text={paragraph} /></p>)}</section>)}</article>
     </div>

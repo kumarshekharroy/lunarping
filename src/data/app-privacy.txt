@@ -1,11 +1,10 @@
 Privacy policy for LunarPing
-Publisher: Shekhar Roy
 Privacy and support contact: contact@shekharroy.com
 Public policy URL: https://lunarping.com/app/privacy
 Website: https://lunarping.com/app
-Last updated: 27 October 2026
+Last updated: 25 November 2026
 
-LunarPing, published by Shekhar Roy, helps you explore the sky and set celestial-event and clock alarms. This policy explains how the app handles your information. Contact contact@shekharroy.com with privacy questions or support requests.
+LunarPing helps you explore the sky and set celestial-event and clock alarms. This policy explains how the app handles your information. Contact contact@shekharroy.com with privacy questions or support requests.
 
 Location and saved information
 Sun, Moon, planet, event and geographic time-zone calculations run on your device. You can enter coordinates manually without granting location permission. Device detection requests approximate or precise foreground location only after you choose it. Detection is bounded and stops when you leave it; the app does not track location in the background.
@@ -13,13 +12,16 @@ Sun, Moon, planet, event and geographic time-zone calculations run on your devic
 The app stores your selected coordinates, IANA time zone, optional place name/icon, alarm rules and their locations, alarm delivery/ringing state, preferences and sky targets in private app storage. Alarm locations remain saved independently of the active observer. This information remains until you change/delete it or clear the app’s storage. A bounded cache retains up to 32 resolved place names, rounded coordinate keys and locale until evicted or app storage is cleared. Core coordinates retain full precision.
 
 Optional place names
-Place-name lookup starts on in supported opt-out regions and off in consent-first or uncertain regions. You can change it in Settings → Location & privacy; your saved choice always takes precedence. When enabled, selected coordinates and language may be passed to your device’s place-name service. That device-dependent service may process requests online under its provider’s terms and privacy policy. Its availability, retention and transport are outside this app’s control. Turning the option off prevents new lookups and discards canceled results, but cannot recall a request already sent. Saved names continue to work offline. You may enter your own label instead.
+Place-name lookup starts on in supported opt-out regions and off in consent-first or uncertain regions. You can change it in Settings → Location & time; your saved choice always takes precedence. When enabled, selected coordinates and language may be passed to your device’s place-name service. That device-dependent service may process requests online under its provider’s terms and privacy policy. Its availability, retention and transport are outside this app’s control. Turning the option off prevents new lookups and discards canceled results, but cannot recall a request already sent. Saved names continue to work offline. You may enter your own label instead.
 
 Camera and orientation
 Camera Finder uses the rear camera for a live preview only. The app does not record, save or upload camera images. Orientation and magnetic sensors help estimate direction while the relevant screen is active. They are released when no longer needed. These readings are not uploaded by the app. Camera alignment and predictions have stated limitations and must not be used for safety-critical navigation or viewing the Sun directly.
 
 Notifications, alarms and lock screen
 Notifications, precise-alarm access and lock-screen alarm presentation are controlled by Android and your choices. Ringing notifications use private visibility; Android’s lock-screen settings remain authoritative. Opening the full-screen alarm can display its place and timing. Restrict lock-screen/full-screen access if these details are sensitive. Battery restrictions, force stop, reboot before unlock, notification settings, sound policy and hardware can delay or prevent delivery.
+
+Optional satellite data
+Satellites are off by default. When you turn them on, the app downloads orbital data (element sets) for the satellite groups you choose from CelesTrak (https://celestrak.org/). It keeps the last successful download in private app storage so satellite calculations can run offline. It refreshes a group at least two hours after a successful download and may retry a failed request later. CelesTrak receives the requested group, the app’s name and version, and standard network information such as your IP address. The app sends no observing coordinates, saved alarm locations or user-entered information in these requests. CelesTrak processes requests under its own terms. The app calculates satellite positions, passes and optional ISS pass alerts on your device. Android schedules ISS pass alerts locally from your saved observing location. Turning satellites off stops downloads. Clearing the app’s storage removes the saved orbital data.
 
 Optional online services and privacy choices
 The offline sky map, calculations, saved places and alarms remain usable with optional services off. These services are available only when configured for the app. In supported opt-out regions they start on automatically, without a popup. They start off in consent-first or uncertain regions. Settings → Data & privacy choices provides independent choices for usage analytics, crash reports, performance diagnostics and online configuration. In consent-first or uncertain regions, an optional choice appears after at least three app sessions (sessions are separated by 30 minutes), at an appropriate quiet moment. Each switch takes effect independently and saves immediately. Done keeps your choices, including leaving everything off; Later is available. Declining does not reduce offline functionality. Later defers the prompt by two sessions. Choices are specific to a privacy-policy revision.

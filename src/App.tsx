@@ -29,7 +29,7 @@ function App({ path = '/', copyrightYear = new Date().getFullYear() }: { path?: 
     <main id="main">
       {route === '/' ? <><Hero /><ProductHighlight /><ToolGrid /><About /><Contact /></> : route === '/app' ? <AppPage /> : route === '/app/privacy' ? <PrivacyPage /> : <section id="top" className="not-found container"><span className="section-kicker">LUNARPING / 404</span><h1>This page is out of orbit.</h1><p>Head home to explore the app and tool collection.</p><a className="button button-primary" href="/">Back to LunarPing →</a></section>}
     </main>
-    <Footer copyrightYear={copyrightYear} />
+    <Footer copyrightYear={copyrightYear} showCreator={route !== '/app/privacy'} />
   </>
 }
 export default App

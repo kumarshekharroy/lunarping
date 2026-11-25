@@ -56,7 +56,14 @@ assert.ok(!htmlPages.get('/app').includes('<form') && !htmlPages.get('/app/priva
 
 const decode = html => html.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/\s+/g, ' ')
 const policy = await read('src/data/app-privacy.txt')
-const policyHtml = decode(htmlPages.get('/app/privacy'))
+const privacy = htmlPages.get('/app/privacy')
+const policyHtml = decode(privacy)
+const homeAuthor = home.match(/<meta name="author" content="([^"]+)"/)?.[1]
+assert.ok(homeAuthor && !privacy.includes(homeAuthor), 'The policy route omits the personal publisher name from its content and metadata')
+assert.ok(privacy.includes('id="optional-satellite-data"'), 'Satellite disclosure has its own section')
+assert.ok(privacy.includes('href="#optional-satellite-data"'), 'Policy contents link to the satellite disclosure')
+const lastUpdated = policy.split('\n').find(line => line.startsWith('Last updated: '))
+assert.ok(lastUpdated && policyHtml.includes(lastUpdated), 'The page displays the revision date from the policy source')
 for (const paragraph of policy.trim().split(/\n\s*\n/).slice(1)) {
   // Heading and following paragraph share a source block. Check each line so
   // inserted section numbers and accessible links don't affect text integrity.

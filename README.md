@@ -31,7 +31,7 @@ The website is maintained here and has not been deployed by this task. A later e
 - `src/data/app.ts`: app identity, official tagline, support email, and download link.
 - `src/data/kitna.ts`: Kitna Lagega identity, description, website, and Google Play link.
 - `src/data/site.ts`: per-route titles, descriptions, canonical and social metadata, structured data, and sitemap URLs.
-- `src/data/app-privacy.txt`: exact bundled Android policy dated **27 October 2026**. `PrivacyPage.tsx` renders its sections without rewriting policy paragraphs. Keep this file synchronized with the policy shipped in future app releases.
+- `src/data/app-privacy.txt`: a copy of the bundled Android policy. `PrivacyPage.tsx` reads the revision date and renders its sections without rewriting policy paragraphs. Keep this file synchronized with the policy shipped in future app releases.
 - `src/components/CelestialScene.tsx`: original SVG illustrations with an accessible Moon/Sun/Saturn selector. They are labeled illustrations, not live astronomical results or app interfaces.
 - `src/pages/AppPage.tsx`: feature content and supporting vector artwork.
 - `src/index.css`: shared foundations and existing tool styles. `src/redesign.css`: shared observatory palette, redesign, app, and policy styles.
